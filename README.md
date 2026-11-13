@@ -34,7 +34,6 @@ Requirements: macOS 11 or later on an Apple Silicon Mac, and an internet connect
 | Apply | **Done** (your choice is remembered) |
 | Quit | ⌘Q or the red window button |
 
-<p align="center"><img src="docs/settings.png" alt="Settings panel" width="320"></p>
 
 When the countdown reaches zero the digits pulse for the whole day, then the display disappears.
 

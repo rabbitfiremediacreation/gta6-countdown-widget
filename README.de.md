@@ -34,7 +34,6 @@ Voraussetzung: macOS 11 oder neuer auf einem Mac mit Apple-Silicon-Chip und Inte
 | Übernehmen | **Done** (die Auswahl wird gemerkt) |
 | Beenden | ⌘Q oder roter Fensterknopf |
 
-<p align="center"><img src="docs/settings.png" alt="Einstellungen" width="320"></p>
 
 Bei null pulsieren die Ziffern den ganzen Tag lang, danach verschwindet die Anzeige.
 
