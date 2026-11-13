@@ -1,0 +1,98 @@
+<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GTA 6 Widget</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+html,body{margin:0;height:100%;background:#111;display:grid;place-items:center;font-family:-apple-system,Helvetica,sans-serif}
+#w{width:min(100vw,calc(100vh*9/16));aspect-ratio:9/16;display:flex;flex-direction:column;background:#000;color:#fff;overflow:hidden;border-radius:14px;position:relative;container-type:inline-size}
+#pic{flex:1;position:relative;background:#000}
+#pic>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s}
+#pic>.card{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transition:opacity 1.2s;background:linear-gradient(#ca42a4,#ee5598)}
+#pic>.card img{width:78%;display:block}
+#pic .on{opacity:1!important}
+#logo{position:absolute;bottom:22cqw;left:0;right:0;display:flex;justify-content:center;padding-bottom:7%;z-index:2;transition:opacity .6s}
+#logo img{width:40%;filter:drop-shadow(0 2px 8px #000a)}
+#logo.hide{opacity:0}
+#bar{font-family:'Anton',Impact,'Arial Narrow',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:3%;background:#15151b}
+#cl{color:#ff9a3c;font-size:clamp(14px,5.4cqw,28px);text-align:center;margin-bottom:3%;white-space:nowrap}
+#bd.hb{animation:pu 1.2s ease-in-out infinite}@keyframes pu{50%{transform:scale(1.06)}}
+#bd{display:flex;justify-content:space-between}
+.g{width:23%;text-align:center}
+.pr{display:flex;gap:6%;perspective:60cqw}
+.d{position:relative;flex:1;height:16cqw;font-size:14.5cqw;line-height:16cqw;color:#fff;letter-spacing:0}
+.h{position:absolute;left:0;right:0;height:50%;overflow:hidden;background:#24242c;backface-visibility:hidden}
+.h span{position:absolute;left:0;right:0;height:200%;text-align:center}
+.h.t{top:0;border-radius:5px 5px 0 0;border-bottom:1px solid #000}.h.t span{top:0}
+.h.b{bottom:0;border-radius:0 0 5px 5px;background:#1b1b21}.h.b span{bottom:0}
+.h.ft{transform-origin:50% 100%;animation:ft .25s ease-in forwards}
+.h.fb{transform-origin:50% 0;transform:rotateX(90deg);animation:fb .25s .25s ease-out forwards}
+@keyframes ft{to{transform:rotateX(-90deg)}}@keyframes fb{to{transform:rotateX(0)}}
+.lb{font-size:clamp(9px,3.2cqw,16px);color:#ff4fa3;margin-top:5%}
+#menu{position:absolute;inset:0;z-index:5;background:#000d;display:none;flex-direction:column;justify-content:center;padding:6cqw;font-family:-apple-system,Helvetica,sans-serif;color:#fff;font-size:clamp(12px,4cqw,20px);overflow:auto}
+#menu.open{display:flex}
+#menu h3{margin:2.5cqw 0 1.5cqw;font-size:.8em;letter-spacing:.08em;text-transform:uppercase;color:#ff4fa3}
+#menu label{display:flex;align-items:center;gap:2.5cqw;padding:1.6cqw 0;cursor:pointer}
+#menu input[type=checkbox]{width:1.1em;height:1.1em;accent-color:#ff4fa3}
+#menu input[type=datetime-local]{width:100%;box-sizing:border-box;font-size:1em;padding:1.5cqw;background:#24242c;color:#fff;border:1px solid #555;border-radius:6px;color-scheme:dark}
+#menu .row{display:flex;gap:2.5cqw;margin-top:3cqw}
+#menu button{flex:1;font-size:1em;padding:2cqw;border:0;border-radius:8px;background:#ff4fa3;color:#fff;font-weight:600;cursor:pointer}
+#menu button.g{background:#333}
+#menu .n{font-size:.75em;color:#aaa;margin-top:2cqw}
+#pic.demo{margin:2.5cqw;border:.7cqw dashed #ff4fa3;border-radius:2.5cqw;display:flex;align-items:center;justify-content:center;text-align:center;padding:8cqw;box-sizing:border-box;font-family:'Anton',Impact,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#fff;font-size:6.5cqw;line-height:1.5;background:#15151b}
+#pic.demo small{display:block;margin-top:4cqw;font-size:.6em;color:#ff9a3c}
+#logo .box{width:44%;aspect-ratio:807/540;display:flex;align-items:center;justify-content:center;border:.7cqw dashed #ff4fa3;border-radius:2cqw;background:#15151bf0;font-family:'Anton',Impact,sans-serif;letter-spacing:.08em;color:#fff;font-size:6cqw;text-align:center;line-height:1.2}
+</style>
+<div id=w><div id=pic></div><div id=logo><img id=lg alt="" style="display:none"></div><div id=bar><div id=bd></div></div><div id=menu></div></div>
+<script>
+const DEMO=/[?&]demo/.test(location.search);
+(async()=>{
+if(DEMO){document.getElementById('logo').innerHTML='<div class=box>GTA6<br>LOGO</div>';document.getElementById('pic').className='demo';document.getElementById('pic').innerHTML='<div>Images &amp; logo are downloaded from rockstargames.com when the app starts<small>nothing is bundled in the app</small></div>'}else fetch('logo.url').then(r=>r.text()).then(u=>{const l=document.getElementById('lg');l.onload=()=>l.style.display='';l.src=u.trim()}).catch(()=>{});
+const all=await (await fetch('images.json')).json();
+const CATS=[['orte','Places (Vice City, Leonida Keys …)'],['personen','People'],['ultimate','Ultimate Edition'],['vintage','Vintage Vice City Pack'],['artwork','Artworks']];
+const DEF='2026-11-19T00:00';
+let cfg={cats:CATS.map(c=>c[0]),target:DEF};
+try{const o=JSON.parse(localStorage.getItem('gta6cfg')||'null');if(o&&o.cats&&o.target)cfg=o}catch(e){}
+const save=()=>{try{localStorage.setItem('gta6cfg',JSON.stringify(cfg))}catch(e){}};
+const p=document.getElementById('pic');
+const A=[0,1].map(()=>{const e=new Image();e.alt='';p.appendChild(e);return e});
+let imgs=[],i=0,cur=0,tm=0;
+function rebuild(){if(DEMO)return;imgs=all.filter(m=>cfg.cats.indexOf(m.c)>=0);if(!imgs.length)imgs=all.slice();
+for(let k=imgs.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[imgs[k],imgs[j]]=[imgs[j],imgs[k]]}
+i=0;clearInterval(tm);next();tm=setInterval(next,5000)}
+const load=(e,k)=>new Promise(r=>{const m=imgs[k%imgs.length];e.onload=()=>r(true);e.onerror=()=>r(false);e.style.objectPosition=m.x+'% 50%';e.src=m.u});
+async function next(){const e=A[cur^1];let tries=0;
+while(tries<5&&!(await load(e,i++)))tries++;
+if(tries>=5)return;A[cur].classList.remove('on');e.classList.add('on');cur^=1}
+rebuild();
+window.gtaNext=next;
+const menu=document.getElementById('menu');
+function openMenu(){menu.innerHTML='<h3>Images</h3><label><input type=checkbox id=ca> All</label>'+CATS.map(c=>'<label><input type=checkbox class=cc value='+c[0]+'> '+c[1]+'</label>').join('')+'<h3>Countdown to</h3><input type=datetime-local id=tg><div class=n>Local time of this device</div><div class=row><button class=g id=rs>Reset</button><button id=ok>Done</button></div>';
+const cc=[].slice.call(menu.querySelectorAll('.cc')),ca=document.getElementById('ca'),tg=document.getElementById('tg');
+cc.forEach(x=>x.checked=cfg.cats.indexOf(x.value)>=0);tg.value=cfg.target;
+const sync=()=>{ca.checked=cc.every(x=>x.checked)};sync();
+ca.onchange=()=>{cc.forEach(x=>x.checked=ca.checked)};cc.forEach(x=>x.onchange=sync);
+document.getElementById('rs').onclick=()=>{cc.forEach(x=>x.checked=true);ca.checked=true;tg.value=DEF};
+document.getElementById('ok').onclick=()=>{const c=cc.filter(x=>x.checked).map(x=>x.value);cfg={cats:c.length?c:CATS.map(x=>x[0]),target:tg.value||DEF};save();menu.classList.remove('open');rebuild();cd()};
+menu.classList.add('open')}
+window.gtaOpenMenu=openMenu;
+let lp=0,sx=0,sy=0;
+const lpStart=ev=>{if(menu.classList.contains('open'))return;const t=ev.touches?ev.touches[0]:ev;sx=t.clientX;sy=t.clientY;clearTimeout(lp);lp=setTimeout(openMenu,700)};
+const lpEnd=()=>clearTimeout(lp);
+const lpMove=ev=>{const t=ev.touches?ev.touches[0]:ev;if(Math.abs(t.clientX-sx)+Math.abs(t.clientY-sy)>10)clearTimeout(lp)};
+const w=document.getElementById('w');
+w.addEventListener('mousedown',lpStart);w.addEventListener('touchstart',lpStart,{passive:true});
+['mouseup','mouseleave','touchend','touchcancel'].forEach(n=>w.addEventListener(n,lpEnd));
+w.addEventListener('mousemove',lpMove);w.addEventListener('touchmove',lpMove,{passive:true});
+const L=['Tage','Std','Min','Sek'],bd=document.getElementById('bd'),D=[];
+L.forEach(n=>{const g=document.createElement('div');g.className='g';g.innerHTML='<div class=pr></div>';bd.appendChild(g);
+for(let q=0;q<2;q++){const d=document.createElement('div');d.className='d';d.v=' ';d.innerHTML='<div class="h t"><span></span></div><div class="h b"><span></span></div>';g.firstChild.appendChild(d);D.push(d)}});
+function setD(d,v){if(d.v===v)return;const o=d.v;d.v=v;
+d.innerHTML='<div class="h t"><span>'+v+'</span></div><div class="h b"><span>'+o+'</span></div><div class="h t ft"><span>'+o+'</span></div><div class="h b fb"><span>'+v+'</span></div>';
+clearTimeout(d.tm);d.tm=setTimeout(()=>{d.innerHTML='<div class="h t"><span>'+v+'</span></div><div class="h b"><span>'+v+'</span></div>'},560)}
+function cd(){const T=new Date(cfg.target);let r=Math.floor((T-new Date())/1000);if(isNaN(r))r=1;
+const da=r<=0&&r>-86400;bd.classList.toggle('hb',da);
+const bar=document.getElementById('bar');if(r<=-86400){bar.style.display='none';return}bar.style.display='';
+if(r<0)r=0;
+const v=[Math.floor(r/86400),Math.floor(r%86400/3600),Math.floor(r%3600/60),r%60].map(x=>(x<10?'0':'')+x).join('');
+for(let q=0;q<8;q++)setD(D[q],v[q])}
+cd();setInterval(cd,1000);
+})();
+</script></html>
