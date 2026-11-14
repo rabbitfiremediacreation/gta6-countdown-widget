@@ -1,5 +1,5 @@
 use include_dir::{include_dir, Dir};
-use std::{borrow::Cow, process::Command};
+use std::{borrow::Cow, process::Command, rc::Rc};
 use tao::{
     dpi::LogicalSize,
     event::{Event, StartCause, WindowEvent},
@@ -97,14 +97,35 @@ fn main() -> wry::Result<()> {
     MenuEvent::set_event_handler(Some(move |e| {
         let _ = proxy.send_event(e);
     }));
-    let window = WindowBuilder::new()
+    let window = Rc::new(WindowBuilder::new()
         .with_title("GTA6 COUNTDOWN")
         .with_inner_size(LogicalSize::new(405.0, 720.0))
         .with_min_inner_size(LogicalSize::new(270.0, 480.0))
         .build(&event_loop)
-        .unwrap();
+        .unwrap());
+    let win2 = window.clone();
 
     let webview = WebViewBuilder::new()
+        .with_ipc_handler(move |req| {
+            // Format-Wechsel aus den Settings: Fenster auf Hoch- oder Querformat bringen
+            match req.body().as_str() {
+                "fmt:169" => {
+                    win2.set_min_inner_size(Some(LogicalSize::new(480.0, 270.0)));
+                    let s = win2.inner_size().to_logical::<f64>(win2.scale_factor());
+                    if s.width < s.height {
+                        win2.set_inner_size(LogicalSize::new(960.0, 540.0));
+                    }
+                }
+                "fmt:916" => {
+                    win2.set_min_inner_size(Some(LogicalSize::new(270.0, 480.0)));
+                    let s = win2.inner_size().to_logical::<f64>(win2.scale_factor());
+                    if s.width > s.height {
+                        win2.set_inner_size(LogicalSize::new(405.0, 720.0));
+                    }
+                }
+                _ => {}
+            }
+        })
         .with_custom_protocol("gta".into(), move |_id, req| {
             let mut path = req.uri().path().trim_start_matches('/').to_string();
             if path.is_empty() {
@@ -127,7 +148,7 @@ fn main() -> wry::Result<()> {
             }
         })
         .with_url("gta://localhost/index.html")
-        .build(&window)?;
+        .build(&*window)?;
 
     let mut menu_keep: Option<Menu> = None;
     event_loop.run(move |event, _, flow| {

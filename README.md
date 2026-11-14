@@ -29,6 +29,7 @@ Requirements: macOS 11 or later on an Apple Silicon Mac, and an internet connect
 | What | How |
 | --- | --- |
 | Open settings | **Long-press** (about 0.7 s) anywhere on the window, or **GTA6 COUNTDOWN → Settings…** in the menu bar (⌘,) |
+| Switch format | Under **Format** pick **Portrait 9:16** (default) or **Landscape 16:9**; the window resizes to match |
 | Choose images | Tick the categories you want, or **All** |
 | Change the countdown | Set date and time under **Countdown to** (local time of your Mac). **Reset** goes back to 19 Nov 2026, 00:00 |
 | Apply | **Done** (your choice is remembered) |
