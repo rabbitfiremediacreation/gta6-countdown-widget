@@ -1,0 +1,26 @@
+<!doctype html><html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GTA6</title>
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden;cursor:none}
+#s{position:fixed;inset:0}
+#s img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.6s;transform:scale(1)}
+#s img.on{opacity:1;animation:kb 12s linear forwards}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.07)}}
+#logo{position:fixed;left:0;right:0;bottom:6vh;display:flex;justify-content:center;pointer-events:none}
+#logo img{height:14vh;filter:drop-shadow(0 2px 10px #000a)}
+</style>
+<div id=s></div><div id=logo><img id=lg alt="" style="display:none"></div>
+<script>
+(async()=>{
+fetch('logo.url').then(r=>r.text()).then(u=>{const l=document.getElementById('lg');l.onload=()=>l.style.display='';l.src=u.trim()}).catch(()=>{});
+const all=await (await fetch('images.json')).json();
+const s=document.getElementById('s');
+const A=[0,1].map(()=>{const e=new Image();e.alt='';s.appendChild(e);return e});
+const imgs=all.slice();
+for(let k=imgs.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[imgs[k],imgs[j]]=[imgs[j],imgs[k]]}
+let i=0,cur=0;
+const load=(e,k)=>new Promise(r=>{e.onload=()=>r(true);e.onerror=()=>r(false);e.src=imgs[k%imgs.length].u});
+async function next(){const e=A[cur^1];let t=0;while(t<5&&!(await load(e,i++)))t++;if(t>=5)return;
+A[cur].classList.remove('on');e.classList.remove('on');void e.offsetWidth;e.classList.add('on');cur^=1}
+next();setInterval(next,9000);
+})();
+</script></html>

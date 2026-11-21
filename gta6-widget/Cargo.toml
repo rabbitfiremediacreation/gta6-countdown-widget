@@ -3,6 +3,14 @@ name = "gta6-countdown-widget"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "gta6-countdown-widget"
+path = "src/main.rs"
+
+[[bin]]
+name = "gta6-screensaver"
+path = "src/bin/screensaver.rs"
+
 [profile.release]
 opt-level = "s"
 lto = true

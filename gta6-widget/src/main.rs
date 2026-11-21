@@ -1,5 +1,7 @@
 use include_dir::{include_dir, Dir};
-use std::{borrow::Cow, process::Command, rc::Rc};
+use std::{borrow::Cow, rc::Rc};
+
+mod fetch;
 use tao::{
     dpi::LogicalSize,
     event::{Event, StartCause, WindowEvent},
@@ -10,65 +12,6 @@ use muda::{Menu, MenuEvent, MenuItem, PredefinedMenuItem, Submenu};
 use wry::{http::Response, WebViewBuilder};
 
 static ASSETS: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
-
-const PAGES: [&str; 2] = [
-    "https://www.rockstargames.com/VI/downloads",
-    "https://www.rockstargames.com/VI/downloads/screenshots",
-];
-const PREFIX: &str = "/VI/_next/static/media/";
-
-// Holt die aktuellen Bild-Adressen von Rockstars offiziellen Download-Seiten (die Dateinamen
-// enthalten einen Hash, der sich bei Seiten-Updates ändert). Schlägt das fehl, gilt die eingebaute Liste.
-fn images_json() -> (String, String) {
-    let baked = ASSETS
-        .get_file("images.json")
-        .map(|f| String::from_utf8_lossy(f.contents()).to_string())
-        .unwrap_or_else(|| "[]".into());
-    let baked_logo = ASSETS
-        .get_file("logo.url")
-        .map(|f| String::from_utf8_lossy(f.contents()).trim().to_string())
-        .unwrap_or_default();
-    let mut logo = baked_logo.clone();
-    let mut found: Vec<(String, String)> = Vec::new();
-    for page_url in PAGES {
-        let page = match Command::new("/usr/bin/curl").args(["-sL", "--max-time", "5", page_url]).output() {
-            Ok(o) if o.status.success() => String::from_utf8_lossy(&o.stdout).to_string(),
-            _ => continue,
-        };
-        let mut rest = page.as_str();
-        while let Some(i) = rest.find(PREFIX) {
-            let tail = &rest[i..];
-            let end = tail
-                .find(|c: char| !(c.is_ascii_alphanumeric() || "/_.~%-".contains(c)))
-                .unwrap_or(tail.len());
-            let path = &tail[..end];
-            if path.ends_with(".png") && path[PREFIX.len()..].split('.').next() == Some("vi") {
-                logo = format!("https://www.rockstargames.com{}", path);
-            }
-            if path.ends_with(".jpg") {
-                let base = path[PREFIX.len()..].split('.').next().unwrap_or("").to_string();
-                found.push((base, format!("https://www.rockstargames.com{}", path)));
-            }
-            rest = &tail[end.max(1)..];
-        }
-    }
-    // in der eingebauten Liste nur die Adressen durch die frischen ersetzen (Kategorie und Ausschnitt bleiben)
-    let mut out = baked.clone();
-    for entry in baked.split("},") {
-        if let (Some(n), Some(old)) = (field(entry, "\"n\":\""), field(entry, "\"u\":\"")) {
-            if let Some((_, fresh)) = found.iter().find(|(b, _)| *b == n) {
-                out = out.replace(&old, fresh);
-            }
-        }
-    }
-    (out, logo)
-}
-
-fn field(s: &str, key: &str) -> Option<String> {
-    let i = s.find(key)? + key.len();
-    let e = s[i..].find('"')?;
-    Some(s[i..i + e].to_string())
-}
 
 fn mime(path: &str) -> &'static str {
     match path.rsplit('.').next().unwrap_or("") {
@@ -91,7 +34,15 @@ fn build_menu() -> Menu {
 }
 
 fn main() -> wry::Result<()> {
-    let (images, logo) = images_json();
+    let baked = ASSETS
+        .get_file("images.json")
+        .map(|f| String::from_utf8_lossy(f.contents()).to_string())
+        .unwrap_or_else(|| "[]".into());
+    let baked_logo = ASSETS
+        .get_file("logo.url")
+        .map(|f| String::from_utf8_lossy(f.contents()).trim().to_string())
+        .unwrap_or_default();
+    let (images, logo) = fetch::images_json(baked, baked_logo);
     let event_loop = EventLoopBuilder::<MenuEvent>::with_user_event().build();
     let proxy = event_loop.create_proxy();
     MenuEvent::set_event_handler(Some(move |e| {
