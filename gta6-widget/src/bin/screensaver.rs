@@ -1,3 +1,4 @@
+#![cfg_attr(target_os = "windows", windows_subsystem = "windows")]
 // Bildschirmschoner (Windows: als .scr umbenennen; macOS: zum Testen im Fenster/Vollbild).
 // Argumente nach Windows-Konvention: /s = Schoner starten, /c = Einstellungen (keine), /p = Vorschau (nichts tun).
 use include_dir::{include_dir, Dir};
