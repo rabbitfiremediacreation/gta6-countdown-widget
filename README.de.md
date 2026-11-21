@@ -22,7 +22,7 @@ Angefangen hat das Projekt als **Klapptafel-Countdown-Widget** bis zum Erscheine
 
 **Windows 10/11**
 
-1. `GTA6.scr` aus dem [Screensaver-Release](../../releases/tag/saver-1.0) laden.
+1. `GTA6.scr` aus dem [Screensaver-Release](../../releases/tag/saver-1.1) laden.
 2. Rechtsklick → **Installieren**, dann in den Bildschirmschoner-Einstellungen **GTA6** wählen. (Windows zeigt evtl. eine SmartScreen-Warnung, weil die Datei nicht signiert ist: **Weitere Informationen → Trotzdem ausführen**.) Nötig ist die WebView2-Runtime, die Windows 10/11 schon mitbringen.
 
 Beide Versionen brauchen Internet für die Bilder; ohne bleibt der Bildschirm schwarz. Selbst bauen: `screensaver/build-mac.sh` (macOS) oder `cargo build --release --bin gta6-screensaver` in `gta6-widget/` (der Windows-Build läuft auf GitHub Actions).

@@ -22,7 +22,7 @@ The project started as a split-flap **countdown widget** to the release. The gam
 
 **Windows 10/11**
 
-1. Download `GTA6.scr` from the [screensaver release](../../releases/tag/saver-1.0).
+1. Download `GTA6.scr` from the [screensaver release](../../releases/tag/saver-1.1).
 2. Right-click it → **Install**, then choose **GTA6** in the screen saver settings. (Windows may show a SmartScreen warning because the file is not signed: **More info → Run anyway**.) The WebView2 runtime is needed; Windows 10/11 already have it.
 
 Both versions need an internet connection for the pictures; without it the screen stays black. Building from source: `screensaver/build-mac.sh` (macOS) or `cargo build --release --bin gta6-screensaver` in `gta6-widget/` (the Windows build runs on GitHub Actions).
