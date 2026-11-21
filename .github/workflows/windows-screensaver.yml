@@ -21,4 +21,5 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/saver-')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "${{ github.ref_name }}" GTA6.scr --title "Screensaver (Windows + macOS)" --notes "Windows: GTA6.scr, right-click > Install. Unsigned." 
+        run: |
+          gh release create "${{ github.ref_name }}" GTA6.scr --title "Screensaver for Windows" --notes "GTA6.scr: right-click, Install. Unsigned."

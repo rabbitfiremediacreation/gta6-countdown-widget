@@ -1,6 +1,35 @@
-# GTA6 COUNTDOWN
+# GTA6 Screensaver
 
 *[English version](README.md)*
+
+Ein kostenloser **GTA-VI-Bildschirmschoner für macOS und Windows**: eine ruhige, gemischte Diashow mit rund 200 offiziellen Screenshots und dem GTA-VI-Logo, live von Rockstars eigener Website geladen. Von Rockstar ist nichts eingebaut.
+
+Angefangen hat das Projekt als **Klapptafel-Countdown-Widget** bis zum Erscheinen. Das Spiel ist da, deshalb ist jetzt der Bildschirmschoner die Hauptsache; das Countdown-Widget gibt es weiterhin (siehe [Countdown-Widget](#countdown-widget-das-original)).
+
+## Bildschirmschoner
+
+| | |
+| --- | --- |
+| Aussehen | Schwarzer Bildschirm, alle 9 Sekunden ein Bild mit langsamem Zoom und 1,6 s Überblendung, GTA-VI-Logo unten |
+| Bilder | Alle rund 200 offiziellen Screenshots, gemischt, in 16:9 |
+| Beenden | Maus bewegen, klicken oder eine Taste drücken |
+
+**macOS (Apple Silicon, macOS 11+)**
+
+1. `GTA6.saver.zip` aus dem [Screensaver-Release](../../releases/tag/saver-1.0) laden und entpacken.
+2. `GTA6.saver` doppelklicken. Warnt macOS (nicht notarisiert), per Rechtsklick → **Öffnen**.
+3. In **Systemeinstellungen → Bildschirmschoner** **GTA6** auswählen.
+
+**Windows 10/11**
+
+1. `GTA6.scr` aus dem [Screensaver-Release](../../releases/tag/saver-1.0) laden.
+2. Rechtsklick → **Installieren**, dann in den Bildschirmschoner-Einstellungen **GTA6** wählen. (Windows zeigt evtl. eine SmartScreen-Warnung, weil die Datei nicht signiert ist: **Weitere Informationen → Trotzdem ausführen**.) Nötig ist die WebView2-Runtime, die Windows 10/11 schon mitbringen.
+
+Beide Versionen brauchen Internet für die Bilder; ohne bleibt der Bildschirm schwarz. Selbst bauen: `screensaver/build-mac.sh` (macOS) oder `cargo build --release --bin gta6-screensaver` in `gta6-widget/` (der Windows-Build läuft auf GitHub Actions).
+
+---
+
+# Countdown-Widget (das Original)
 
 Ein kleines Hochkant-Widget (9:16, Postkartengröße) für macOS: eine **Flughafen-Klapptafel**, die bis zum Erscheinen von Grand Theft Auto VI herunterzählt, dahinter eine Diashow mit offiziellen Bildern.
 

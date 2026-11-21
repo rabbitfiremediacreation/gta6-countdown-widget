@@ -1,6 +1,35 @@
-# GTA6 COUNTDOWN
+# GTA6 Screensaver
 
 *[Deutsche Version](README.de.md)*
+
+A free **GTA VI screensaver for macOS and Windows**: a slow, shuffled slideshow of ~200 official screenshots with the GTA VI logo, loaded live from Rockstar's own website. Nothing from Rockstar is bundled.
+
+The project started as a split-flap **countdown widget** to the release. The game is out now, so the screensaver is the main thing; the countdown widget is still included (see [Countdown widget](#countdown-widget-the-original)).
+
+## Screensaver
+
+| | |
+| --- | --- |
+| Look | Black screen, one picture every 9 seconds with a slow zoom and a 1.6 s crossfade, GTA VI logo at the bottom |
+| Pictures | All ~200 official screenshots, shuffled, shown in 16:9 |
+| Leave | Move the mouse, click or press any key |
+
+**macOS (Apple Silicon, macOS 11+)**
+
+1. Download `GTA6.saver.zip` from the [screensaver release](../../releases/tag/saver-1.0) and unzip it.
+2. Double-click `GTA6.saver`. If macOS warns that it is not from an identified developer (it is not notarized), right-click it → **Open**.
+3. Pick **GTA6** in **System Settings → Screen Saver**.
+
+**Windows 10/11**
+
+1. Download `GTA6.scr` from the [screensaver release](../../releases/tag/saver-1.0).
+2. Right-click it → **Install**, then choose **GTA6** in the screen saver settings. (Windows may show a SmartScreen warning because the file is not signed: **More info → Run anyway**.) The WebView2 runtime is needed; Windows 10/11 already have it.
+
+Both versions need an internet connection for the pictures; without it the screen stays black. Building from source: `screensaver/build-mac.sh` (macOS) or `cargo build --release --bin gta6-screensaver` in `gta6-widget/` (the Windows build runs on GitHub Actions).
+
+---
+
+# Countdown widget (the original)
 
 A small portrait widget (9:16, postcard size) for macOS: a **split-flap airport display** counting down to the release of Grand Theft Auto VI, with a slideshow of official artwork behind it.
 
@@ -85,6 +114,7 @@ The web page itself (`index.html`) also runs in any browser: `python3 -m http.se
 
 ```
 index.html            the whole widget (HTML, CSS, JavaScript)
+screensaver/          macOS screensaver (Swift); the Windows one is gta6-widget/src/bin/screensaver.rs
 images.json           picture names, categories, crop positions (no pictures)
 logo.url              address of the logo on rockstargames.com
 gta6-widget/          the Rust app (wry + tao + muda), embeds the files above
